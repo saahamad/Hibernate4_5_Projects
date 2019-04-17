@@ -14,50 +14,51 @@ import com.DAO.UserDAO;
 import com.entities.User;
 
 public class HibernateExecutor {
-	
+
 	    static User user = null;
 	    static Session session = null;
 	    static SessionFactory sessionFactory = null;
 	    static Transaction transaction;
 	    static Scanner scanner = null;
 	    UserDAO userDao = new UserDAO();
-	    
+
 	    private static SessionFactory buildSessionFactory() {
 	        Configuration configuration = new Configuration();
 	        configuration.configure("hibernate.cfg.xml");
 	        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().
-	        		applySettings(configuration.getProperties()).build();	 	          
+	        		applySettings(configuration.getProperties()).build();
 	        return configuration.buildSessionFactory(serviceRegistry);
 	    }
 
 	public static void main(String[] args) {
-		
+
 		scanner = new Scanner(System.in);
-		
+
 		System.out.println("Select------------1 for (save record)");
 		System.out.println("Select------------2 for (get a record)");
-			
+
 		int choice = scanner.nextInt();
 		new HibernateExecutor().getTransactions(choice);
 	}
-	
+
 	public void getTransactions(int choice) {
-		
+
 		switch (choice) {
 		case 1:
-			
+
 			session = buildSessionFactory().openSession();
 			transaction = session.beginTransaction();
-			
+
 			// Object preparation for mapping
+			System.out.println("Enter a name:");
 			User user = new User();
 			user.setDate(new Date());
-			user.setUserName("Afraz");			
-			userDao.insertRecord(user,session,transaction);			
+			user.setUserName(scanner.next());
+			userDao.insertRecord(user,session,transaction);
 			break;
-			
-        case 2:  
-        	
+
+        case 2:
+
         	session = buildSessionFactory().openSession();
         	System.out.println("Enter record id:");
         	userDao.accessRecord(scanner.nextInt(), session);
@@ -66,6 +67,6 @@ public class HibernateExecutor {
 		default:
 			System.out.println("Sorry for invalid transaction!");
 		}
-			
+
 	}
 }
