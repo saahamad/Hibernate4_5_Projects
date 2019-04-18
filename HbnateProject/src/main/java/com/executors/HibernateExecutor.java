@@ -35,10 +35,11 @@ public class HibernateExecutor {
 
 		scanner = new Scanner(System.in);
 
-		System.out.println("Select------------1 for (save record)");
+		System.out.println("Select------------1 for (save a record)");
 		System.out.println("Select------------2 for (get a record)");
 		System.out.println("Select------------3 for (get all records)");
-		System.out.println("Select------------4 for (get all records)");
+		System.out.println("Select------------4 for (search by name)");
+		System.out.println("Select------------5 for (delete a record)");
 
 		int choice = scanner.nextInt();
 		new HibernateExecutor().getTransactions(choice);
@@ -82,6 +83,19 @@ public class HibernateExecutor {
         	List<User> userList = userDao.searchNameRecord(session,scanner.next());
         	for(User userObj:userList)
         	System.out.println("\n Id is:"+userObj.getUserId()+"\n Name is:"+userObj.getUserName()+"\n Date is:"+userObj.getDate());
+
+			break;
+
+        case 5:
+        	session = buildSessionFactory().openSession();
+        	transaction = session.beginTransaction();
+        	System.out.println("Enter a user Id!");
+        	if(userDao.deleteRecord(session,scanner.nextInt()) > 0) {
+        	 transaction.commit();
+        	 System.out.println("Record has been deleted");
+        	}
+            else
+             System.out.println("Record has been deleted");
 
 			break;
 
