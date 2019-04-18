@@ -26,7 +26,6 @@ public class UserDAO {
 	public void accessRecord(int userId,Session session) {
 		try {
 			User user = (User) session.get(User.class,userId);
-
 			System.out.println("User Name.."+user.getUserName());
 			System.out.println("User Id...."+user.getUserId());
 			System.out.println("User date.."+user.getDate());
@@ -40,14 +39,13 @@ public class UserDAO {
 	}
 
 	public List<User> recordsList(Session session){
-
 		String hql = "From User user";
 		return session.createQuery(hql).list();
 	}
 
 	/*
 	 *  Named parameter [:nameofparameter] and Possitional parameter [?]
-			Possitional parameter is depricated in Hibernate 4 and 5
+	    Possitional parameter is depricated in Hibernate 4 and 5
 
 		String hql = "FROM User user WHERE user.userName= ?";
 		query.setParameter(0,name);
@@ -66,4 +64,16 @@ public class UserDAO {
 			return list;
 		}
 
+	public int deleteRecord(Session session,int userId){
+		String hql = "delete User user WHERE user.userId= :userid";
+		Query query = session.createQuery(hql);
+		query.setParameter("userid", userId);
+		int result = 0;
+		try {
+		  result = query.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
+}
