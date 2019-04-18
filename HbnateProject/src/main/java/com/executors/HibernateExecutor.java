@@ -1,6 +1,7 @@
 package com.executors;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import org.hibernate.Session;
@@ -36,6 +37,8 @@ public class HibernateExecutor {
 
 		System.out.println("Select------------1 for (save record)");
 		System.out.println("Select------------2 for (get a record)");
+		System.out.println("Select------------3 for (get all records)");
+		System.out.println("Select------------4 for (get all records)");
 
 		int choice = scanner.nextInt();
 		new HibernateExecutor().getTransactions(choice);
@@ -50,10 +53,11 @@ public class HibernateExecutor {
 			transaction = session.beginTransaction();
 
 			// Object preparation for mapping
-			System.out.println("Enter a name:");
 			User user = new User();
+			System.out.println("Enter a name:");
 			user.setDate(new Date());
 			user.setUserName(scanner.next());
+
 			userDao.insertRecord(user,session,transaction);
 			break;
 
@@ -62,6 +66,23 @@ public class HibernateExecutor {
         	session = buildSessionFactory().openSession();
         	System.out.println("Enter record id:");
         	userDao.accessRecord(scanner.nextInt(), session);
+			break;
+
+        case 3:
+        	session = buildSessionFactory().openSession();
+        	List<User> list = userDao.recordsList(session);
+        	for(User userObj:list)
+        	System.out.println("\n Id is:"+userObj.getUserId()+"\n Name is:"+userObj.getUserName()+"\n Date is:"+userObj.getDate());
+
+			break;
+
+        case 4:
+        	session = buildSessionFactory().openSession();
+        	System.out.println("Enter a name!");
+        	List<User> userList = userDao.searchNameRecord(session,scanner.next());
+        	for(User userObj:userList)
+        	System.out.println("\n Id is:"+userObj.getUserId()+"\n Name is:"+userObj.getUserName()+"\n Date is:"+userObj.getDate());
+
 			break;
 
 		default:
