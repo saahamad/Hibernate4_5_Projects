@@ -45,12 +45,21 @@ public class UserDAO {
 		return session.createQuery(hql).list();
 	}
 
-	public List<User> searchNameRecord(Session session,String name){
+	/*
+	 *  Named parameter [:nameofparameter] and Possitional parameter [?]
+			Possitional parameter is depricated in Hibernate 4 and 5
 
-			String hql = "FROM User user WHERE user.userName='"+name+"'";
+		String hql = "FROM User user WHERE user.userName= ?";
+		query.setParameter(0,name);
+	*
+	*/
+	public List<User> searchNameRecord(Session session,String name){
+			String hql = "FROM User user WHERE user.userName= :username";
 			List<User> list = null;
 			try {
-			list = session.createQuery(hql).list();
+			Query query = session.createQuery(hql);
+			query.setParameter("username",name);
+			list = query.list();
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
